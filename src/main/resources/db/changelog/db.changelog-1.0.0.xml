@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="Create ${testSchema} schema" author="Yuri Lyulchenko">
+        <sql>create schema if not exists ${testSchema}</sql>
+        <rollback>drop schema ${testSchema}</rollback>
+    </changeSet>
+
+    <changeSet id="Create ${testSchema}.test table" author="Yuri Lyulchenko">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="${testSchema}" tableName="test"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="${testSchema}" tableName="test">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_test"/>
+            </column>
+            <column name="test_name" type="nvarchar(128)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
